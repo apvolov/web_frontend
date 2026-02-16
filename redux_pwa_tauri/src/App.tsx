@@ -1,13 +1,27 @@
-import { BrowserRouter, Routes, Route, Link } from 'react-router-dom';
+import { useEffect } from 'react';
+import { HashRouter, Routes, Route, Link } from 'react-router-dom';
 import { Navbar } from 'react-bootstrap';
 import { HomePage, PrincipalitiesPage, PrincipalityPage } from "./pages";
-import { BreadCrumbs } from "./components/BreadCrumbs"; // 1. Не забудь импортировать!
+import { BreadCrumbs } from "./components/BreadCrumbs";
 import defaultMainLogo from "./assets/main_logo.png";
 import { ROUTES } from './Routes';
+import { invoke } from "@tauri-apps/api/core";
 
 function App() {
+  useEffect(() => {
+    invoke('tauri', { cmd: 'create' })
+      .then(() => { console.log("Tauri launched") })
+      .catch(() => { console.log("Tauri not launched (running in browser)") });
+
+    return () => {
+      invoke('tauri', { cmd: 'close' })
+        .then(() => { console.log("Tauri closed") })
+        .catch(() => { console.log("Error on close") });
+    };
+  }, []);
+
   return (
-    <BrowserRouter>
+    <HashRouter>
       <Navbar bg="white" className="main-header shadow-none"> 
         <div className="header-container"> 
           <Link to="/" className="header-logo-link">
@@ -27,7 +41,7 @@ function App() {
             <Route path={ROUTES.SERVICE_DETAIL} element={<PrincipalityPage />} />
          </Routes>
       </main>
-    </BrowserRouter>
+    </HashRouter>
   );
 }
 

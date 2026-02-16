@@ -14,3 +14,15 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
     </Provider>
   </React.StrictMode>,
 )
+
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('./sw.js')
+      .then((registration) => {
+        console.log('Service Worker успешно зарегистрирован:', registration.scope);
+      })
+      .catch((error) => {
+        console.log('ошибка при регистрации Service Worker:', error);
+      });
+  });
+}

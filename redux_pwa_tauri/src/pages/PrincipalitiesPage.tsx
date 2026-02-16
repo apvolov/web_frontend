@@ -39,7 +39,7 @@ export const PrincipalitiesPage: FC = () => {
     navigate(`/principalities/${id}`);
   };
 
-  const handleAdd = (id: number) => {
+  const handleAdd = (_id: number) => {
     setBasketCount(prev => prev + 1);
   };
 
