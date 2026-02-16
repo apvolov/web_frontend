@@ -8,7 +8,7 @@ interface Props extends Principality {
 }
 
 export const PrincipalityCard: FC<Props> = ({ id, name, image, year0, year1, onDetailClick, onAddClick }) => {
-    const imageUrl = image ? `/rip/${image}` : defaultPrincipalityImage;
+    const imageUrl = image ? `http://localhost:9000/rip/${image}` : defaultPrincipalityImage;
 
     return (
         <div className="card">

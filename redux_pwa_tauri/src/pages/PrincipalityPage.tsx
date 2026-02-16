@@ -19,7 +19,7 @@ export const PrincipalityPage: FC = () => {
         );
     }
 
-    const imageUrl = principality.image ? `/rip/${principality.image}` : defaultPrincipalityImage;
+    const imageUrl = principality.image ? `http://localhost:9000/rip/${principality.image}` : defaultPrincipalityImage;
 
     return (
         <div className="container">

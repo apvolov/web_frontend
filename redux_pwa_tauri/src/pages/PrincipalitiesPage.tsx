@@ -17,7 +17,7 @@ export const PrincipalitiesPage: FC = () => {
   const searchQuery = useAppSelector((state) => state.filters.searchQuery);
 
   useEffect(() => {
-    fetch("/api/principalities") 
+    fetch("http://localhost:8080/api/principalities") 
       .then((res) => {
         if (!res.ok) throw new Error("ошибка сервера");
         return res.json();
