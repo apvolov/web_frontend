@@ -7,62 +7,89 @@ import BasketIcon from "../assets/icon_basket.svg";
 import SearchIcon from "../assets/icon_search.svg";
 
 export const PrincipalitiesPage: FC = () => {
-  const [principalities, setPrincipalities] = useState<Principality[]>(MOCK_PRINCIPALITIES);
-  const [searchQuery, setSearchQuery] = useState("");
-  const [basketCount, setBasketCount] = useState(0);
+  const [principalities, setPrincipalities] = useState<Principality[]>([]);
+  
+  const [localInput, setLocalInput] = useState("");
+  const [searchResult, setSearchResult] = useState("");
+  
+  const [isLoading, setIsLoading] = useState(true);
   const navigate = useNavigate();
 
   useEffect(() => {
-    fetch("/api/principalities") 
+    setIsLoading(true);
+
+    const url = searchResult 
+      ? `/api/principalities?name=${encodeURIComponent(searchResult)}` 
+      : "/api/principalities";
+
+    fetch(url) 
       .then((res) => {
         if (!res.ok) throw new Error("ошибка сервера");
         return res.json();
       })
       .then((data) => {
-        console.log("данные загружены");
         setPrincipalities(data);
+        setIsLoading(false);
       })
       .catch((err) => {
-        console.warn("использование mock", err);
+        console.warn("Ошибка сервера, используем mock", err);
+        const mocked = MOCK_PRINCIPALITIES.filter(p => 
+            p.name.toLowerCase().includes(searchResult.toLowerCase())
+        );
+        setPrincipalities(mocked);
+        setIsLoading(false);
       });
-  }, []);
+  }, [searchResult]);
 
-  const filteredData = principalities.filter((p) =>
-    p.name.toLowerCase().includes(searchQuery.toLowerCase())
-  );
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Enter') {
+      setSearchResult(localInput);
+    }
+  };
 
   const handleDetail = (id: number) => {
-        navigate(`/principalities/${id}`);
-    };
+    navigate(`/principalities/${id}`);
+  };
 
   const handleAdd = (id: number) => {
-    console.log("Добавлено в корзину:", id);
-    setBasketCount(prev => prev + 1);
+    console.log("Клик по 'Добавить' (id: " + id + ")");
+  };
+
+  const handleBasketClick = (e: React.MouseEvent) => {
+    e.preventDefault(); 
+    fetch("/api/populations/draft", { method: "POST" })
+      .then(() => console.log("Метод /api/populations/draft вызван"))
+      .catch((err) => console.error("Ошибка draft:", err));
   };
 
   return (
     <div className="container">
       <div className="search-section">
         <div className="search-form">
-        <input
-          type="text"
-          placeholder="Поиск княжества..."
-          className="search-input"
-          value={searchQuery}
-          onChange={(e) => setSearchQuery(e.target.value)}
-          style={{ 
-            backgroundImage: `url("${SearchIcon}")`,
-            backgroundRepeat: 'no-repeat',
-            backgroundPosition: 'right 12px center',
-            backgroundSize: '20px 20px',
-          }}
-        />
+          <input
+            type="text"
+            placeholder="Поиск княжества..."
+            className="search-input"
+            value={localInput}
+            onChange={(e) => setLocalInput(e.target.value)}
+            onKeyDown={handleKeyDown}
+            style={{ 
+              backgroundImage: `url("${SearchIcon}")`,
+              backgroundRepeat: 'no-repeat',
+              backgroundPosition: 'right 12px center',
+              backgroundSize: '20px 20px',
+            }}
+          />
         </div>
       </div>
 
       <div className="principalities-grid">
-        {filteredData.length > 0 ? (
-          filteredData.map((item) => (
+        {isLoading ? (
+          <div style={{ textAlign: "center", gridColumn: "1 / -1" }}>
+            <h3>Загрузка...</h3>
+          </div>
+        ) : principalities.length > 0 ? (
+          principalities.map((item) => (
             <PrincipalityCard
               key={item.id}
               {...item}
@@ -72,14 +99,14 @@ export const PrincipalitiesPage: FC = () => {
           ))
         ) : (
           <div style={{ textAlign: "center", gridColumn: "1 / -1", padding: "50px" }}>
-            <h3>Княжество не найдено</h3>
+            <h3>Ничего не найдено</h3>
           </div>
         )}
       </div>
 
-      <a href="/population" className="floating-basket" onClick={(e) => e.preventDefault()}>
+      <a href="/population" className="floating-basket" onClick={handleBasketClick}>
         <img src={BasketIcon} alt="Корзина" />
-        <span className="basket-count">{basketCount}</span>
+        <span className="basket-count">0</span>
       </a>
     </div>
   );
