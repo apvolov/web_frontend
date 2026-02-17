@@ -1,18 +1,52 @@
-import { type FC } from "react";
+import { type FC, useState, useEffect } from "react";
 import { useParams, Link } from "react-router-dom";
-import { MOCK_PRINCIPALITIES } from "../mocks/principalities";
+import { type Principality } from "../modules/types"; // Импортируем тип
 import { ROUTES } from "../Routes";
 import defaultPrincipalityImage from "../assets/default_principality_image.jpg"; 
 
 export const PrincipalityPage: FC = () => {
     const { id } = useParams<{ id: string }>();
-    const principality = MOCK_PRINCIPALITIES.find(p => p.id === Number(id));
+    
+    const [principality, setPrincipality] = useState<Principality | null>(null);
+    const [isLoading, setIsLoading] = useState<boolean>(true);
+    const [error, setError] = useState<string | null>(null);
 
-    if (!principality) {
+    useEffect(() => {
+        setIsLoading(true);
+        setError(null);
+
+        fetch(`http://localhost:8080/api/principalities/${id}`)
+            .then((res) => {
+                if (!res.ok) {
+                    throw new Error("Княжество не найдено на сервере");
+                }
+                return res.json();
+            })
+            .then((data) => {
+                setPrincipality(data);
+                setIsLoading(false);
+            })
+            .catch((err) => {
+                console.error("Ошибка загрузки:", err);
+                setError(err.message);
+                setIsLoading(false);
+            });
+    }, [id]);
+
+    if (isLoading) {
         return (
-            <div className="container" style={{ textAlign: 'center' }}>
+            <div className="container" style={{ textAlign: 'center', padding: '50px' }}>
+                <h2>Загрузка данных...</h2>
+            </div>
+        );
+    }
+
+    if (error || !principality) {
+        return (
+            <div className="container" style={{ textAlign: 'center', padding: '50px' }}>
                 <h1>Княжество не найдено</h1>
-                <Link to={ROUTES.SERVICES} className="card-link btn-more" style={{ marginTop: '20px' }}>
+                <p>{error}</p>
+                <Link to={ROUTES.SERVICES} className="card-link btn-more" style={{ marginTop: '20px', display: 'inline-block' }}>
                     Вернуться к списку
                 </Link>
             </div>
@@ -46,7 +80,7 @@ export const PrincipalityPage: FC = () => {
             </section>
 
             <div style={{ display: 'flex', justifyContent: 'center', marginTop: '50px' }}>
-                <Link to={ROUTES.SERVICES} className="card-link btn-more" style={{ width: '250px', textDecoration: 'none' }}>
+                <Link to={ROUTES.SERVICES} className="card-link btn-more" style={{ width: '250px', textDecoration: 'none', textAlign: 'center' }}>
                     К списку княжеств
                 </Link>
             </div>

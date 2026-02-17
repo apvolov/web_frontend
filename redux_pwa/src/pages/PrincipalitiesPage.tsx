@@ -2,15 +2,15 @@ import { type FC, useState, useEffect } from "react";
 import { PrincipalityCard } from "../components/PrincipalityCard";
 import { type Principality } from "../modules/types";
 import { useNavigate } from "react-router-dom";
-import { MOCK_PRINCIPALITIES } from "../mocks/principalities";
 import { useAppDispatch, useAppSelector } from "../store/hook";
 import { setSearchQuery } from "../store/slices/filterSlice";
+
 import BasketIcon from "../assets/icon_basket.svg";
 import SearchIcon from "../assets/icon_search.svg";
 
 export const PrincipalitiesPage: FC = () => {
-  const [principalities, setPrincipalities] = useState<Principality[]>(MOCK_PRINCIPALITIES);
-  const [basketCount, setBasketCount] = useState(0);
+  const [principalities, setPrincipalities] = useState<Principality[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
   
   const [localSearch, setLocalSearch] = useState("");
 
@@ -18,25 +18,35 @@ export const PrincipalitiesPage: FC = () => {
   const dispatch = useAppDispatch();
   
   const searchQuery = useAppSelector((state) => state.filters.searchQuery);
-
+  
   useEffect(() => {
     setLocalSearch(searchQuery);
   }, [searchQuery]);
 
   useEffect(() => {
-    fetch(`http://localhost:8080/api/principalities`)
+    setIsLoading(true);
+
+    const baseUrl = "http://localhost:8080/api/principalities";
+    const url = searchQuery 
+      ? `${baseUrl}?name=${encodeURIComponent(searchQuery)}` 
+      : baseUrl;
+
+    fetch(url)
       .then((res) => {
         if (!res.ok) throw new Error("ошибка сервера");
         return res.json();
       })
       .then((data) => {
-        console.log("данные загружены");
+        console.log("Данные получены с сервера");
         setPrincipalities(data);
+        setIsLoading(false);
       })
       .catch((err) => {
-        console.warn("использование mock", err);
+        console.error("Ошибка API:", err);
+        setIsLoading(false);
+        setPrincipalities([]);
       });
-  }, []);
+  }, [searchQuery]);
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Enter') {
@@ -44,16 +54,20 @@ export const PrincipalitiesPage: FC = () => {
     }
   };
 
-  const filteredData = principalities.filter((p) =>
-    p.name.toLowerCase().includes(searchQuery.toLowerCase())
-  );
-
   const handleDetail = (id: number) => {
     navigate(`/principalities/${id}`);
   };
 
   const handleAdd = (_id: number) => {
-    setBasketCount(prev => prev + 1);
+    console.log("Клик по кнопке Добавить для id:", _id);
+  };
+
+  const handleBasketClick = () => {
+    fetch("http://localhost:8080/api/populations/draft", {
+      method: "GET",
+    })
+      .then(() => console.log("Метод populations/draft вызван"))
+      .catch((err) => console.error("Ошибка при вызове метода:", err));
   };
 
   return (
@@ -67,7 +81,6 @@ export const PrincipalitiesPage: FC = () => {
             value={localSearch}
             onChange={(e) => setLocalSearch(e.target.value)}
             onKeyDown={handleKeyDown}
-
             style={{ 
               backgroundImage: `url("${SearchIcon}")`,
               backgroundRepeat: 'no-repeat',
@@ -79,8 +92,12 @@ export const PrincipalitiesPage: FC = () => {
       </div>
 
       <div className="principalities-grid">
-        {filteredData.length > 0 ? (
-          filteredData.map((item) => (
+        {isLoading ? (
+          <div style={{ textAlign: "center", gridColumn: "1 / -1" }}>
+            <h3>Загрузка...</h3>
+          </div>
+        ) : principalities.length > 0 ? (
+          principalities.map((item) => (
             <PrincipalityCard
               key={item.id}
               {...item}
@@ -90,15 +107,19 @@ export const PrincipalitiesPage: FC = () => {
           ))
         ) : (
           <div style={{ textAlign: "center", gridColumn: "1 / -1", padding: "50px" }}>
-            <h3>Княжество не найдено</h3>
+            <h3>Ничего не найдено</h3>
           </div>
         )}
       </div>
 
-      <a href="/population" className="floating-basket" onClick={(e) => e.preventDefault()}>
+      <div 
+        className="floating-basket" 
+        onClick={handleBasketClick} 
+        style={{ cursor: 'pointer' }}
+      >
         <img src={BasketIcon} alt="Корзина" />
-        <span className="basket-count">{basketCount}</span>
-      </a>
+        <span className="basket-count">0</span>
+      </div>
     </div>
   );
 };
