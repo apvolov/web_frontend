@@ -7,6 +7,7 @@ import { useAppDispatch, useAppSelector } from "../store/hook";
 import { setSearchQuery } from "../store/slices/filterSlice";
 import BasketIcon from "../assets/icon_basket.svg";
 import SearchIcon from "../assets/icon_search.svg";
+import { dest_api } from "../../target_config";
 
 export const PrincipalitiesPage: FC = () => {
   const [principalities, setPrincipalities] = useState<Principality[]>(MOCK_PRINCIPALITIES);
@@ -17,7 +18,7 @@ export const PrincipalitiesPage: FC = () => {
   const searchQuery = useAppSelector((state) => state.filters.searchQuery);
 
   useEffect(() => {
-    fetch("http://localhost:8080/api/principalities") 
+    fetch(`${dest_api}/principalities`)
       .then((res) => {
         if (!res.ok) throw new Error("ошибка сервера");
         return res.json();

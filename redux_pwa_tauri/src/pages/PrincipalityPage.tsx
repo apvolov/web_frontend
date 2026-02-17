@@ -3,6 +3,7 @@ import { useParams, Link } from "react-router-dom";
 import { MOCK_PRINCIPALITIES } from "../mocks/principalities";
 import { ROUTES } from "../Routes";
 import defaultPrincipalityImage from "../assets/default_principality_image.jpg"; 
+import { dest_img } from "../../target_config";
 
 export const PrincipalityPage: FC = () => {
     const { id } = useParams<{ id: string }>();
@@ -19,11 +20,10 @@ export const PrincipalityPage: FC = () => {
         );
     }
 
-    const imageUrl = principality.image ? `http://localhost:9000/rip/${principality.image}` : defaultPrincipalityImage;
+    const imageUrl = principality.image ? `${dest_img}/${principality.image}` : defaultPrincipalityImage;
 
     return (
         <div className="container">
-            {/* Этот блок благодаря flex в CSS поставит картинку слева, а инфо справа */}
             <section className="principality-detail">
                 <div className="detail-image-block">
                     <img 
@@ -46,7 +46,6 @@ export const PrincipalityPage: FC = () => {
                 </div>
             </section>
 
-            {/* Блок кнопки снизу по центру */}
             <div style={{ display: 'flex', justifyContent: 'center', marginTop: '50px' }}>
                 <Link to={ROUTES.SERVICES} className="card-link btn-more" style={{ width: '250px', textDecoration: 'none' }}>
                     К списку княжеств
