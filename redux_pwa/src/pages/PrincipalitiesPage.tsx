@@ -11,10 +11,17 @@ import SearchIcon from "../assets/icon_search.svg";
 export const PrincipalitiesPage: FC = () => {
   const [principalities, setPrincipalities] = useState<Principality[]>(MOCK_PRINCIPALITIES);
   const [basketCount, setBasketCount] = useState(0);
-  const navigate = useNavigate();
+  
+  const [localSearch, setLocalSearch] = useState("");
 
+  const navigate = useNavigate();
   const dispatch = useAppDispatch();
+  
   const searchQuery = useAppSelector((state) => state.filters.searchQuery);
+
+  useEffect(() => {
+    setLocalSearch(searchQuery);
+  }, [searchQuery]);
 
   useEffect(() => {
     fetch(`http://localhost:8080/api/principalities`)
@@ -30,6 +37,12 @@ export const PrincipalitiesPage: FC = () => {
         console.warn("использование mock", err);
       });
   }, []);
+
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Enter') {
+      dispatch(setSearchQuery(localSearch));
+    }
+  };
 
   const filteredData = principalities.filter((p) =>
     p.name.toLowerCase().includes(searchQuery.toLowerCase())
@@ -47,19 +60,21 @@ export const PrincipalitiesPage: FC = () => {
     <div className="container">
       <div className="search-section">
         <div className="search-form">
-        <input
-          type="text"
-          placeholder="Поиск княжества..."
-          className="search-input"
-          value={searchQuery}
-          onChange={(e) => dispatch(setSearchQuery(e.target.value))}
-          style={{ 
-            backgroundImage: `url("${SearchIcon}")`,
-            backgroundRepeat: 'no-repeat',
-            backgroundPosition: 'right 12px center',
-            backgroundSize: '20px 20px',
-          }}
-        />
+          <input
+            type="text"
+            placeholder="Поиск княжества..."
+            className="search-input"
+            value={localSearch}
+            onChange={(e) => setLocalSearch(e.target.value)}
+            onKeyDown={handleKeyDown}
+
+            style={{ 
+              backgroundImage: `url("${SearchIcon}")`,
+              backgroundRepeat: 'no-repeat',
+              backgroundPosition: 'right 12px center',
+              backgroundSize: '20px 20px',
+            }}
+          />
         </div>
       </div>
 
