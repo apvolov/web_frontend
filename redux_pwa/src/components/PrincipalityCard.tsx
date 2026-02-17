@@ -1,7 +1,6 @@
 import { type FC } from 'react';
 import { type Principality } from '../modules/types';
 import defaultPrincipalityImage from "../assets/default_principality_image.jpg"; 
-import { dest_img } from "../../target_config";
 
 interface Props extends Principality {
     onDetailClick: (id: number) => void;
@@ -9,7 +8,7 @@ interface Props extends Principality {
 }
 
 export const PrincipalityCard: FC<Props> = ({ id, name, image, year0, year1, onDetailClick, onAddClick }) => {
-    const imageUrl = image ? `${dest_img}/${image}` : defaultPrincipalityImage;
+    const imageUrl = image ? `http://localhost:9000/rip/${image}` : defaultPrincipalityImage;
 
     return (
         <div className="card">

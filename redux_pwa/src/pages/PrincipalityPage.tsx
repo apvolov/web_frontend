@@ -3,7 +3,6 @@ import { useParams, Link } from "react-router-dom";
 import { MOCK_PRINCIPALITIES } from "../mocks/principalities";
 import { ROUTES } from "../Routes";
 import defaultPrincipalityImage from "../assets/default_principality_image.jpg"; 
-import { dest_img } from "../../target_config";
 
 export const PrincipalityPage: FC = () => {
     const { id } = useParams<{ id: string }>();
@@ -20,7 +19,7 @@ export const PrincipalityPage: FC = () => {
         );
     }
 
-    const imageUrl = principality.image ? `${dest_img}/${principality.image}` : defaultPrincipalityImage;
+    const imageUrl = principality.image ? `http://localhost:9000/rip/${principality.image}` : defaultPrincipalityImage;
 
     return (
         <div className="container">
