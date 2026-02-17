@@ -1,8 +1,10 @@
 import { type FC, useState, useEffect } from "react";
 import { useParams, Link } from "react-router-dom";
-import { type Principality } from "../modules/types"; // Импортируем тип
+import { type Principality } from "../modules/types";
 import { ROUTES } from "../Routes";
 import defaultPrincipalityImage from "../assets/default_principality_image.jpg"; 
+// Импортируем моки для резервного использования
+import { MOCK_PRINCIPALITIES } from "../mocks/principalities";
 
 export const PrincipalityPage: FC = () => {
     const { id } = useParams<{ id: string }>();
@@ -23,12 +25,21 @@ export const PrincipalityPage: FC = () => {
                 return res.json();
             })
             .then((data) => {
+                console.log("Данные детализации получены с сервера");
                 setPrincipality(data);
                 setIsLoading(false);
             })
-            .catch((err) => {
-                console.error("Ошибка загрузки:", err);
-                setError(err.message);
+            .catch((_err) => {
+                console.warn("Бэкенд недоступен, пытаюсь найти княжество в mock-данных");
+                
+                const foundMock = MOCK_PRINCIPALITIES.find(p => p.id === Number(id));
+
+                if (foundMock) {
+                    setPrincipality(foundMock);
+                    setError(null);
+                } else {
+                    setError("Княжество не найдено ни на сервере, ни в локальной базе.");
+                }
                 setIsLoading(false);
             });
     }, [id]);
@@ -45,7 +56,7 @@ export const PrincipalityPage: FC = () => {
         return (
             <div className="container" style={{ textAlign: 'center', padding: '50px' }}>
                 <h1>Княжество не найдено</h1>
-                <p>{error}</p>
+                <p style={{ color: 'red' }}>{error}</p>
                 <Link to={ROUTES.SERVICES} className="card-link btn-more" style={{ marginTop: '20px', display: 'inline-block' }}>
                     Вернуться к списку
                 </Link>
@@ -53,7 +64,9 @@ export const PrincipalityPage: FC = () => {
         );
     }
 
-    const imageUrl = principality.image ? `http://localhost:9000/rip/${principality.image}` : defaultPrincipalityImage;
+    const imageUrl = principality.image 
+        ? `http://localhost:9000/rip/${principality.image}` 
+        : defaultPrincipalityImage;
 
     return (
         <div className="container">
@@ -63,7 +76,9 @@ export const PrincipalityPage: FC = () => {
                         src={imageUrl} 
                         alt={principality.name} 
                         className="detail-image"
-                        onError={(e) => { (e.target as HTMLImageElement).src = defaultPrincipalityImage; }}
+                        onError={(e) => { 
+                            (e.target as HTMLImageElement).src = defaultPrincipalityImage; 
+                        }}
                     />
                 </div>
 

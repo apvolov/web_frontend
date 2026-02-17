@@ -4,6 +4,7 @@ import { type Principality } from "../modules/types";
 import { useNavigate } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../store/hook";
 import { setSearchQuery } from "../store/slices/filterSlice";
+import { MOCK_PRINCIPALITIES } from "../mocks/principalities";
 
 import BasketIcon from "../assets/icon_basket.svg";
 import SearchIcon from "../assets/icon_search.svg";
@@ -42,9 +43,14 @@ export const PrincipalitiesPage: FC = () => {
         setIsLoading(false);
       })
       .catch((err) => {
-        console.error("Ошибка API:", err);
+        console.warn("Бэкенд недоступен, переключаюсь на mock-данные", err);
+        
+        const filteredMocks = MOCK_PRINCIPALITIES.filter((p) =>
+          p.name.toLowerCase().includes(searchQuery.toLowerCase())
+        );
+        
+        setPrincipalities(filteredMocks);
         setIsLoading(false);
-        setPrincipalities([]);
       });
   }, [searchQuery]);
 
@@ -66,8 +72,8 @@ export const PrincipalitiesPage: FC = () => {
     fetch("http://localhost:8080/api/populations/draft", {
       method: "GET",
     })
-      .then(() => console.log("Метод populations/draft вызван"))
-      .catch((err) => console.error("Ошибка при вызове метода:", err));
+      .then(() => console.log("Метод populations/draft успешно вызван"))
+      .catch((err) => console.error("Ошибка при вызове метода (бэк отключен):", err));
   };
 
   return (
