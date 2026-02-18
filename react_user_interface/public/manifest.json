@@ -1,0 +1,15 @@
+{
+  "name": "Княжества Древней Руси",
+  "short_name": "Княжества",
+  "start_url": ".",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#C60033",
+  "icons": [
+    {
+      "src": "icon.png",
+      "sizes": "128x128",
+      "type": "image/png"
+    }
+  ]
+}
