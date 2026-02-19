@@ -1,31 +1,31 @@
-import { HashRouter, Routes, Route, Link } from 'react-router-dom';
-import { Navbar } from 'react-bootstrap';
-import { HomePage, PrincipalitiesPage, PrincipalityPage } from "./pages";
-import { BreadCrumbs } from "./components/BreadCrumbs";
-import defaultMainLogo from "./assets/main_logo.png";
+import { HashRouter, Routes, Route } from 'react-router-dom';
+import { HomePage, PrincipalitiesPage, PrincipalityPage, LoginPage, RegisterPage, PopulationDraftPage, ProfilePage, PopulationsPage, PopulationDetailsPage } from "./pages";
+import { Header } from "./components/Header/Header"; 
+import { BreadCrumbs } from "./components/BreadCrumbs/BreadCrumbs";
 import { ROUTES } from './Routes';
+import './index.css';
 
 function App() {
   return (
     <HashRouter>
-      <Navbar bg="white" className="main-header shadow-none"> 
-        <div className="header-container"> 
-          <Link to="/" className="header-logo-link">
-            <img src={defaultMainLogo} className="header-logo" alt="Logo" />
-          </Link>
-        </div>
-      </Navbar>
+      <Header />
 
       <main className="content-wrapper">
-         <div className="container"> 
-           <BreadCrumbs /> 
-         </div>
+          <div className="container"> 
+            <BreadCrumbs /> 
+          </div>
 
-         <Routes>
-            <Route path="/" element={<HomePage />} />
-            <Route path={ROUTES.SERVICES} element={<PrincipalitiesPage />} />
-            <Route path={ROUTES.SERVICE_DETAIL} element={<PrincipalityPage />} />
-         </Routes>
+          <Routes>
+             <Route path="/" element={<HomePage />} />
+             <Route path={ROUTES.SERVICES} element={<PrincipalitiesPage />} />
+             <Route path={ROUTES.SERVICE_DETAIL} element={<PrincipalityPage />} />
+             <Route path={ROUTES.LOGIN} element={<LoginPage />} />
+             <Route path={ROUTES.REGISTER} element={<RegisterPage />} /> 
+             <Route path={ROUTES.POPULATION_DRAFT} element={<PopulationDraftPage />} />
+             <Route path={ROUTES.PROFILE} element={<ProfilePage />} />
+             <Route path={ROUTES.REQUESTS} element={<PopulationsPage />} />
+             <Route path={ROUTES.REQUEST_DETAIL} element={<PopulationDetailsPage />} />
+          </Routes>
       </main>
     </HashRouter>
   );

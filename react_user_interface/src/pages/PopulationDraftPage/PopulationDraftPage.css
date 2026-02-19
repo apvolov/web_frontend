@@ -1,0 +1,241 @@
+.draft-container {
+    max-width: 1350px;
+    margin: 20px auto;
+    padding: 0 20px;
+    font-family: sans-serif;
+}
+
+.researcher-card {
+    background: #f9f9f9;
+    padding: 20px;
+    border-radius: 8px;
+    border: 1px solid #eee;
+    margin-bottom: 25px;
+}
+
+.researcher-field {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.researcher-field label {
+    font-weight: bold;
+    color: #333;
+}
+
+.custom-select {
+    padding: 8px 12px;
+    border-radius: 4px;
+    border: 1px solid #C60033;
+    min-width: 250px;
+}
+
+.draft-table {
+    border: 1px solid #eee;
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.table-head {
+    display: flex;
+    background: #a60239;
+    color: white;
+    padding: 15px;
+    font-weight: bold;
+    font-size: 22px;
+
+}
+
+.table-head div {
+    text-align: center;
+    justify-content: center;
+}
+
+.table-row {
+    height: 200px;
+    display: flex;
+    align-items: center;
+    padding: 15px;
+    border-bottom: 1px solid #eee;
+    background: #fff;
+}
+
+.col-info { flex: 4; display: flex; align-items: center; gap: 15px; }
+.col-area { flex: 2; display: flex; justify-content: center; }
+.col-action { flex: 1; display: flex; justify-content: center; }
+
+.principality-thumb {
+    width: 250px;
+    height: 150px;
+    object-fit: cover;
+    border-radius: 4px;
+}
+
+.info-text {
+    display: flex;
+    flex-direction: column;
+}
+
+.info-text .name { font-weight: bold; font-size: 20px; }
+.info-text .years { color: #666; font-size: 16px; }
+
+.input-wrapper {
+    display: flex;
+    width: 200px;
+    align-items: center;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    padding: 0 8px;
+}
+
+.area-input {
+    border: none;
+    width: 160px;
+    padding: 8px;
+    text-align: center;
+    outline: none;
+}
+
+.unit { color: #666; font-size: 16px; font-weight: bold; }
+
+.delete-btn {
+    background: #C60033;
+    color: #FFFFFF;
+    display: inline-block;
+    width: 150px;
+    font-weight: 600;
+    padding: 5px 5px;
+    border-radius: 20px;
+    cursor: pointer;
+    text-align: center;
+    border: none;
+    transition: all 0.3s ease;
+}
+
+.main-actions {
+    display: flex;
+    gap: 300px; /* Расстояние между Сохранить и Сформировать */
+}
+
+.delete-btn:hover {
+    background: #a60239;
+    color: white;
+}
+
+.draft-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 30px;
+}
+
+.submit-btn {
+    width: 250px;
+    font-size: 18px;
+    color: #28a745;
+    background-color: transparent;
+    border: 2px solid #28a745;
+    border-radius: 20px;
+    padding: 6px 20px;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.submit-btn:hover { 
+    background-color: #28a745;
+    color: #FFFFFF; 
+}
+
+.del-btn
+{
+    width: 250px;
+    font-size: 18px;
+    color: #C60033;
+    background-color: transparent;
+    border: 2px solid #C60033;
+    border-radius: 20px;
+    padding: 6px 20px;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.del-btn:hover {
+    background-color: #C60033;
+    color: #FFFFFF; 
+}
+
+.save-btn {
+    width: 250px;
+    font-size: 18px;
+    color: #333;
+    background-color: transparent;
+    border: 2px solid #333;
+    border-radius: 20px;
+    padding: 6px 20px;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.save-btn:hover { 
+    background-color: #333;
+    color: #FFFFFF; 
+}
+
+.draft-empty-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    min-height: 70vh;
+    padding: 20px;
+}
+
+.empty-content {
+    text-align: center;
+    max-width: 600px;
+}
+
+.empty-content h2 {
+    font-size: 32px;
+    font-weight: 600;
+    color: #333;
+    margin-bottom: 12px;
+}
+
+.empty-content p {
+    font-size: 28px;
+    color: #666;
+    margin-bottom: 32px;
+    line-height: 1.5;
+}
+
+.btn-back {
+    width: 250px;
+    display: inline-block;
+    padding: 6px 12px;
+    background-color: #C60033;
+    color: #fff;
+    text-decoration: none;
+    border-radius: 40px;
+    font-weight: 500;
+    transition: background-color 0.2s ease, transform 0.1s ease;
+}
+
+.btn-back:hover {
+    background-color: #a60239;
+    transform: translateY(-1px);
+}
+
+.btn-back:active {
+    transform: translateY(0);
+}

@@ -1,0 +1,19 @@
+.auth-footer {
+    margin-top: 20px;
+    text-align: center;
+    font-size: 14px;
+    color: #666;
+}
+
+.auth-link {
+    color: #C60033;
+    font-weight: 600;
+    cursor: pointer;
+    margin-left: 5px;
+    transition: opacity 0.2s;
+}
+
+.auth-link:hover {
+    text-decoration: underline;
+    opacity: 0.8;
+}

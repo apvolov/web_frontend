@@ -1,0 +1,101 @@
+.history-container {
+    max-width: 1350px;
+    margin: 20px auto;
+    padding: 0 20px;
+    font-family: sans-serif;
+}
+
+.history-header-section h1 {
+    font-size: 32px;
+    color: #333;
+    margin-bottom: 25px;
+}
+
+.history-table-custom {
+    border: 1px solid #eee;
+    border-radius: 8px;
+    overflow: hidden;
+    background: #fff;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+}
+
+.table-head-custom {
+    display: flex;
+    background: #a60239;
+    color: white;
+    padding: 15px;
+    font-weight: bold;
+    font-size: 18px; /* Чуть уменьшил, чтобы влезло больше колонок */
+}
+
+.table-row-custom {
+    display: flex;
+    align-items: center;
+    padding: 15px;
+    border-bottom: 1px solid #eee;
+    min-height: 80px;
+    transition: background 0.2s;
+}
+
+.table-row-custom:hover {
+    background: #fffafa;
+}
+
+.col-id { flex: 0.5; display: flex; justify-content: center; }
+.col-res { flex: 2; display: flex; justify-content: center; }
+.col-date { flex: 1.5; display: flex; justify-content: center; }
+.col-status { flex: 1.2; display: flex; justify-content: center; }
+.col-action { flex: 1.2; display: flex; justify-content: center; }
+
+.id-badge {
+    font-weight: bold;
+}
+
+.date-text {
+    text-align: center;
+}
+
+.res-name {
+    text-align: center;
+}
+
+.status-tag {
+    padding: 6px 0;
+    border-radius: 20px;
+    font-size: 14px;
+    font-weight: 600;
+    width: 130px;
+    text-align: center;
+    display: block;
+}
+
+.status-tag.draft { background: #e2e8f0; color: #4a5568; border: 1px solid #4a5568; }
+.status-tag.formed { background: #ebf8ff; color: #2b6cb0; border: 1px solid #bee3f8; }
+.status-tag.finished { background: #f0fff4; color: #2f855a; border: 1px solid #c6f6d5; }
+.status-tag.rejected { background: #fff5f5; color: #c53030; border: 1px solid #fed7d7; }
+
+.history-action-btn {
+    width: 120px;
+    font-size: 16px;
+    color: #333;
+    background-color: transparent;
+    border: 2px solid #333;
+    border-radius: 20px;
+    padding: 5px 0;
+    font-weight: 600;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+}
+
+.history-action-btn:hover {
+    background-color: #333;
+    color: #FFFFFF;
+}
+
+.history-empty {
+    padding: 80px;
+    text-align: center;
+}

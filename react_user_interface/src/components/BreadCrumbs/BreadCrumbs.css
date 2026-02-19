@@ -1,0 +1,18 @@
+.breadcrumb-item {
+    font-size: 20px; 
+}
+
+.breadcrumb-item a {
+    color: #C60033;
+    text-decoration: none;
+}
+
+.breadcrumb-item a:hover {
+    color: #A60239;
+    text-decoration: underline;
+}
+
+.breadcrumb-item.active {
+    color: #A60239 !important;
+    font-weight: 600;
+}

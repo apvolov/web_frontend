@@ -1,0 +1,102 @@
+.main-header {
+    height: 95px;
+    background-color: #FFFFFF !important;
+    border-bottom: 2px solid #D2D2D2;
+    display: flex;
+    align-items: center;
+    padding: 0 !important;
+}
+
+.header-container {
+    width: 100%;
+    max-width: 1700px;
+    margin: 0 auto;
+    padding: 0 40px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.header-auth-block {
+    display: flex;
+    align-items: center;
+    gap: 35px;
+}
+
+.header-logo {
+    height: 55px;
+    width: auto;
+    display: block;
+    transition: transform 0.2s ease;
+    margin: 10px 0; 
+}
+
+.header-logo:hover {
+    transform: scale(1.01);
+}
+
+.my-requests-link {
+    font-size: 20px;
+    color: #C60033;
+    text-decoration: none;
+    font-weight: 500;
+    transition: color 0.2s;
+}
+
+.my-requests-link:hover {
+    text-decoration: underline;
+}
+
+.profile-link {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    text-decoration: none;
+    color: inherit;
+    transition: opacity 0.2s;
+}
+
+.header-user-icon {
+    width: 35px;
+    height: 35px;
+    object-fit: contain;
+}
+
+.user-name {
+    font-size: 20px;
+    color: #C60033;
+}
+
+.user-name:hover {
+    text-decoration: underline;
+}
+
+.btn-login, 
+.btn-logout {
+    font-size: 18px;
+    color: #C60033;
+    background-color: transparent;
+    border: 2px solid #C60033;
+    border-radius: 20px;
+    padding: 6px 20px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.btn-login:hover, 
+.btn-logout:hover {
+    background-color: #C60033;
+    color: #FFFFFF;
+}
+
+@media (max-width: 600px) {
+    .main-header { height: 60px !important; }
+    .header-logo { height: 35px !important; }
+    .header-auth-block { gap: 15px; }
+    .my-orders-link, .user-name { font-size: 14px; }
+}

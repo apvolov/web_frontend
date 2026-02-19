@@ -1,0 +1,154 @@
+.profile-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 80vh;
+}
+
+.profile-card {
+    background: white;
+    padding: 40px;
+    border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 400px;
+    text-align: center;
+}
+
+.profile-icon {
+    width: 80px;
+    height: 80px;
+    margin-bottom: 20px;
+}
+
+.profile-title {
+    margin-bottom: 30px;
+    color: #333;
+}
+
+.info-group {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 15px;
+    font-size: 18px;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 5px;
+}
+
+.info-group label {
+    font-weight: bold;
+    color: #666;
+}
+
+.profile-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-top: 30px;
+}
+
+.btn-secondary {
+    background: #f0f0f0;
+    border: 1px solid #ccc;
+    padding: 10px;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.btn-secondary:hover {
+    background: #e0e0e0;
+}
+
+.profile-form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.profile-form input {
+    padding: 12px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+}
+
+.form-buttons {
+    display: flex;
+    gap: 10px;
+}
+
+.btn-save {
+    flex: 1;
+    background: #C60033;
+    color: white;
+    border: none;
+    padding: 10px;
+    border-radius: 6px;
+    cursor: pointer;
+    border: none;
+    border-radius: 20px;
+}
+
+.btn-save:hover:not(:disabled) {
+    background-color: #a60239;
+}
+
+.btn-cancel {
+    flex: 1;
+    background: #666;
+    color: white;
+    border: none;
+    padding: 10px;
+    border-radius: 6px;
+    cursor: pointer;
+    border: none;
+    border-radius: 20px;
+}
+
+.btn-cancel:hover:not(:disabled) {
+    background-color: #414141;
+}
+
+.btn-change-password,
+.btn-change-login {
+    width: 100%;
+    height: 48px;
+    background-color: #C60033;
+    color: white;
+    border: none;
+    border-radius: 20px;
+    font-size: 20px;
+    font-weight: 600;
+    cursor: pointer;
+    margin-top: 10px;
+}
+
+.btn-change-login:hover:not(:disabled) {
+    background-color: #a60239;
+}
+
+.btn-change-password:hover:not(:disabled) {
+    background-color: #a60239;
+}
+
+.profile-message {
+    padding: 10px;
+    border-radius: 6px;
+    margin-bottom: 15px;
+    font-size: 14px;
+}
+.profile-message.error {
+    background-color: #ffe6e6;
+    color: #cc0000;
+    border: 1px solid #ffcccc;
+}
+.profile-message.success {
+    background-color: #e6ffed;
+    color: #28a745;
+    border: 1px solid #c3e6cb;
+}
+
+.btn-save:disabled {
+    opacity: 0.7;
+    cursor: not-allowed;
+}
