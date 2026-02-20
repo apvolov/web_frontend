@@ -1,7 +1,8 @@
 import { type FC, useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
 import { useAppDispatch, useAppSelector } from "../../store/hook";
-import { registerUser, clearUserError } from "../../store/slices/userSlice";
+import { authStart, setUser, authError, clearUserError } from "../../store/slices/userSlice";
 import { ROUTES } from "../../Routes";
 import { AuthInput } from "../../components/AuthInput/AuthInput";
 import { resetFilters } from "../../store/slices/filterSlice";
@@ -35,7 +36,7 @@ export const RegisterPage: FC = () => {
     if (error) dispatch(clearUserError());
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setValidationError(null);
 
@@ -45,7 +46,33 @@ export const RegisterPage: FC = () => {
     }
 
     if (login && password) {
-      dispatch(registerUser({ login, password }));
+      dispatch(authStart());
+
+      try {
+        const response = await axios.post(
+          "http://localhost:8080/api/users/register",
+          { login, password },
+          { withCredentials: true }
+        );
+
+        const userData = response.data;
+
+        dispatch(
+          setUser({
+            login: userData.login,
+            is_admin: userData.role === "admin" || userData.is_admin === true,
+          })
+        );
+
+        localStorage.setItem("userLogin", userData.login);
+        if (userData.role === "admin" || userData.is_admin) {
+            localStorage.setItem("userRole", "admin");
+        }
+
+      } catch (err: any) {
+        const errMsg = err.response?.data?.error || "Ошибка при регистрации";
+        dispatch(authError(errMsg));
+      }
     }
   };
 

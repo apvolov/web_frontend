@@ -1,6 +1,6 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { Api } from '../../api/Api';
-import { logoutUser } from './userSlice';
+import { logoutSuccess } from './userSlice';
 import { type Principality } from '../../modules/types';
 
 const api = new Api({ withCredentials: true })
@@ -151,7 +151,7 @@ const populationPrincipalityDraftSlice = createSlice({
         state.items = [];
         state.researcherName = null;
       })
-      .addCase(logoutUser.fulfilled, (state) => {
+      .addCase(logoutSuccess, (state) => {
         state.app_id = null;
         state.count = 0;
         state.researcherName = null;

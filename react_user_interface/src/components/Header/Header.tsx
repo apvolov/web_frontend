@@ -1,8 +1,9 @@
 import { type FC } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { Navbar } from 'react-bootstrap';
+import axios from 'axios';
 import { useAppDispatch, useAppSelector } from "../../store/hook";
-import { logoutUser } from "../../store/slices/userSlice";
+import { logoutSuccess } from "../../store/slices/userSlice";
 import { resetDraft } from "../../store/slices/populationPrincipalityDraftSlice";
 import { resetFilters } from '../../store/slices/filterSlice';
 import { ROUTES } from '../../Routes';
@@ -16,11 +17,24 @@ export const Header: FC = () => {
   const location = useLocation();
   const { isAuth, login, isAdmin } = useAppSelector((state) => state.user);
 
-  const handleLogout = () => {
-    dispatch(logoutUser());
-    dispatch(resetDraft());
-    dispatch(resetFilters());
-    navigate(ROUTES.LOGIN);
+  const handleLogout = async () => {
+    try {
+      await axios.post(
+        "http://localhost:8080/api/users/logout", 
+        {}, 
+        { withCredentials: true }
+      );
+    } catch (e) {
+      console.error("Ошибка при логауте на сервере", e);
+    } finally {
+      localStorage.removeItem('userLogin');
+      localStorage.removeItem('userRole');
+
+      dispatch(logoutSuccess());
+      dispatch(resetDraft());
+      dispatch(resetFilters());
+      navigate(ROUTES.LOGIN);
+    }
   };
 
   const isHistoryActive = location.pathname === ROUTES.REQUESTS ? "active-link" : "";
@@ -38,27 +52,16 @@ export const Header: FC = () => {
               <Link to={ROUTES.PROFILE} className="profile-link">
                 <img src={userIcon} alt="Profile" className="header-user-icon" />
                 <span className="user-name">
-                   <strong>{login}</strong>
+                    <strong>{login}</strong>
                 </span>
               </Link>
 
-              {isAdmin ? (
-                <Link 
-                  to={ROUTES.REQUESTS} 
-                  className={`my-requests-link ${isHistoryActive}`}
-                >
-                  Реестр всех заявок
-                </Link>
-              ) : (
-                <>
-                  <Link 
-                    to={ROUTES.REQUESTS} 
-                    className={`my-requests-link ${isHistoryActive}`}
-                  >
-                    Мои заявки
-                  </Link>
-                </>
-              )}
+              <Link 
+                to={ROUTES.REQUESTS} 
+                className={`my-requests-link ${isHistoryActive}`}
+              >
+                {isAdmin ? "Реестр всех заявок" : "Мои заявки"}
+              </Link>
               
               <button className="btn-logout" onClick={handleLogout} style={{ marginLeft: '15px' }}>
                 Выйти

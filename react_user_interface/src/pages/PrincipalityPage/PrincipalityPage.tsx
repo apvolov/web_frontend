@@ -1,10 +1,17 @@
 import { type FC, useEffect } from "react";
 import { useParams, Link, useNavigate } from "react-router-dom";
+import axios from "axios";
 import { useAppDispatch, useAppSelector } from "../../store/hook";
-import { getPrincipality, clearCurrentPrincipality } from "../../store/slices/principalitySlice";
+import { 
+  fetchStart, 
+  setCurrentPrincipality, 
+  fetchError, 
+  clearCurrentPrincipality 
+} from "../../store/slices/principalitySlice";
 import { getDraftPopulation } from "../../store/slices/populationPrincipalityDraftSlice";
 import { ROUTES } from "../../Routes";
 import { FloatingBasket } from "../../components/FloatingBasket/FloatingBasket";
+import { MOCK_PRINCIPALITIES } from "../../mocks/principalities";
 import defaultPrincipalityImage from "../../assets/default_principality_image.jpg";
 import "./PrincipalityPage.css"
 
@@ -18,11 +25,28 @@ export const PrincipalityPage: FC = () => {
   const { items } = useAppSelector((state) => state.populationDraft);
 
   useEffect(() => {
-    if (id) {
-      dispatch(getPrincipality(Number(id)));
-    }
+    const loadPrincipality = async () => {
+      if (!id) return;
+      dispatch(fetchStart());
+
+      try {
+        const response = await axios.get(`http://localhost:8080/api/principalities/${id}`);
+        dispatch(setCurrentPrincipality(response.data));
+      } catch (err: any) {
+        console.warn("Бэкенд недоступен, ищем в моках");
+        const foundMock = MOCK_PRINCIPALITIES.find(p => p.id === Number(id));
+        if (foundMock) {
+          dispatch(setCurrentPrincipality(foundMock as any));
+        } else {
+          dispatch(fetchError(err.response?.data?.error || "Княжество не найдено"));
+        }
+      }
+    };
+
+    loadPrincipality();
+
     if (isAuth) {
-        dispatch(getDraftPopulation());
+      dispatch(getDraftPopulation());
     }
 
     return () => {
@@ -54,8 +78,9 @@ export const PrincipalityPage: FC = () => {
     );
   }
 
+  // Используем адрес твоего бэкенда для картинок
   const imageUrl = currentPrincipality.image 
-    ? `http://localhost:9000/rip/${currentPrincipality.image}` 
+    ? `http://localhost:8080/rip/${currentPrincipality.image}` 
     : defaultPrincipalityImage;
 
   return (

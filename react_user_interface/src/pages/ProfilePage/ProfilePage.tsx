@@ -1,12 +1,14 @@
 import { type FC, useState, useEffect } from "react";
+import axios from "axios";
 import { useAppSelector, useAppDispatch } from "../../store/hook";
-import { updateCurrentUser } from "../../store/slices/userSlice"; // Убедись, что путь верный
+import { authStart, setUser, authError } from "../../store/slices/userSlice";
 import "./ProfilePage.css";
 import userIcon from "../../assets/icon_user.svg";
 
 export const ProfilePage: FC = () => {
   const dispatch = useAppDispatch();
-  const { login, isLoading, error } = useAppSelector((state) => state.user);
+  const { login, isAdmin, isLoading, error } = useAppSelector((state) => state.user);
+  
   const [mode, setMode] = useState<'view' | 'editLogin' | 'editPassword'>('view');
   const [newLogin, setNewLogin] = useState(login ?? "");
   const [newPassword, setNewPassword] = useState("");
@@ -36,15 +38,36 @@ export const ProfilePage: FC = () => {
         return;
     }
 
-    const result = await dispatch(updateCurrentUser(updateData));
+    dispatch(authStart());
 
-    if (updateCurrentUser.fulfilled.match(result)) {
+    try {
+      const response = await axios.put(
+        "http://localhost:8080/api/users/me", 
+        updateData,
+        { withCredentials: true }
+      );
+
+      dispatch(setUser({
+        login: response.data.login,
+        is_admin: isAdmin
+      }));
+
+      if (mode === 'editLogin') {
+        localStorage.setItem('userLogin', response.data.login);
+      }
+
       setMessage({ type: 'success', text: mode === 'editLogin' ? 'Логин изменен' : 'Пароль изменен' });
+      
       setTimeout(() => {
         setMode('view');
         setMessage(null);
       }, 2000);
       setNewPassword("");
+
+    } catch (err: any) {
+      const errMsg = err.response?.data?.error || "Не удалось обновить данные";
+      dispatch(authError(errMsg));
+      setMessage({ type: 'error', text: errMsg });
     }
   };
 

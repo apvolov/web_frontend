@@ -1,7 +1,8 @@
 import { type FC, useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
 import { useAppDispatch, useAppSelector } from "../../store/hook";
-import { loginUser, clearUserError } from "../../store/slices/userSlice";
+import { setUser, authStart, authError, clearUserError } from "../../store/slices/userSlice"; // Новые экшены
 import { ROUTES } from "../../Routes";
 import { AuthInput } from "../../components/AuthInput/AuthInput";
 import { resetFilters } from "../../store/slices/filterSlice";
@@ -17,7 +18,7 @@ export const LoginPage: FC = () => {
 
   useEffect(() => {
     if (isAuth) {
-      dispatch(resetFilters()); // <-- Сбрасываем поиск сразу после входа
+      dispatch(resetFilters());
       navigate(ROUTES.SERVICES);
     }
     return () => {
@@ -25,10 +26,35 @@ export const LoginPage: FC = () => {
     };
   }, [isAuth, navigate, dispatch]);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (login && password) {
-      dispatch(loginUser({ login, password }));
+      dispatch(authStart());
+
+      try {
+        const response = await axios.post(
+          "http://localhost:8080/api/users/login",
+          { login, password },
+          { withCredentials: true }
+        );
+
+        const userData = response.data.user;
+
+        dispatch(
+          setUser({
+            login: userData.login,
+            is_admin: userData.is_admin,
+          })
+        );
+
+        localStorage.setItem("userLogin", userData.login);
+        if (userData.is_admin) {
+          localStorage.setItem("userRole", "admin");
+        }
+      } catch (err: any) {
+        const errorMessage = err.response?.data?.error || "Неверный логин или пароль";
+        dispatch(authError(errorMessage));
+      }
     }
   };
 
@@ -68,7 +94,9 @@ export const LoginPage: FC = () => {
 
           <div className="auth-footer">
             <span className="auth-footer-text">Новый пользователь?</span>
-            <span className="auth-link" onClick={() => navigate(ROUTES.REGISTER)}>Зарегистрироваться</span>
+            <span className="auth-link" onClick={() => navigate(ROUTES.REGISTER)}>
+              Зарегистрироваться
+            </span>
           </div>
         </form>
       </div>
